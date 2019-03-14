@@ -75,8 +75,7 @@ FROM wantedPartyInfo1 w JOIN party p ON w.party_id = p.id;
 --find party family
 CREATE VIEW wantedPartyInfo3 AS
 SELECT w.party_id, countryName, partyName, p.family AS partyFamily
-FROM wantedPartyInfo2 w, party_family p
-WHERE w.party_id = p.party_id;
+FROM wantedPartyInfo2 w LEFT JOIN party_family p ON w.party_id = p.party_id;
 
 --find number of election won
 CREATE VIEW wantedPartyInfo4 AS
