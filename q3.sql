@@ -61,7 +61,7 @@ WHERE totalWon.country_id = totalParty4EachCountry.country_id;
 CREATE VIEW wantedParty AS
 SELECT numOfTimesWon.party_id AS party_id, numOfTimesWon.country_id AS country_id
 FROM avgWinningElection JOIN numOfTimesWon on avgWinningElection.country_id = numOfTimesWon.country_id
-WHERE numOfTimesWon.numOfWon > avgWinningElection.avg;
+WHERE numOfTimesWon.numOfWon > 3 *avgWinningElection.avg;
 
 --find country name
 CREATE VIEW wantedPartyInfo1 AS
