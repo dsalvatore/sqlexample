@@ -24,7 +24,7 @@ SELECT election_result.party_id, party.country_id,
 	   MaxVote.election_id
 FROM MaxVote, election_result, party
 WHERE MaxVote.election_id = election_result.election_id AND 
-	  election_result.party_id = party.id AND MaxVote.highestVote = election_result.votes ;
+	  election_result.party_id = party.id AND MaxVote.highestVote = election_result.votes;
 
 --find out how many times each party has won an election of each country
 CREATE VIEW numOfTimesWon AS
@@ -33,35 +33,17 @@ FROM partyWonElection
 GROUP BY party_id, country_id;
 
 --find the average number of winning elections of parties of the same country
---SELECT party.country_id AS country_id, 
-	   --(sum(numOfTimesWon.numOfWon)/count(party.id)) AS avg
---FROM numOfTimesWon JOIN party ON numOfTimesWon.party_id = party.id
---GROUP BY party.country_id;
-
---find the total number won
-CREATE VIEW totalWon AS
-SELECT country_id, sum(numOfWon) AS totalnumberwon
-FROM numOfTimesWon
-GROUP BY country_id;
-
---find the total party
-CREATE VIEW totalParty4EachCountry AS
-SELECT country_id, count(party.id) AS totalparty
-FROM party
-GROUP BY country_id;
-
---find the average number of winning elections of parties of the same country
 CREATE VIEW avgWinningElection AS
-SELECT totalParty4EachCountry.country_id, (totalnumberwon/totalparty) AS avg
-FROM totalWon, totalParty4EachCountry
-WHERE totalWon.country_id = totalParty4EachCountry.country_id;
-
+SELECT party.country_id AS country_id, 
+	   (sum(numOfTimesWon.numOfWon)/count(party.id)) AS avg
+FROM numOfTimesWon JOIN party ON numOfTimesWon.party_id = party.id
+GROUP BY party.country_id;
 
 --find the wanted party
 CREATE VIEW wantedParty AS
 SELECT numOfTimesWon.party_id AS party_id, numOfTimesWon.country_id AS country_id
 FROM avgWinningElection JOIN numOfTimesWon on avgWinningElection.country_id = numOfTimesWon.country_id
-WHERE numOfTimesWon.numOfWon > 3 *avgWinningElection.avg;
+WHERE numOfTimesWon.numOfWon > 3 * avgWinningElection.avg;
 
 --find country name
 CREATE VIEW wantedPartyInfo1 AS
