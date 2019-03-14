@@ -91,7 +91,7 @@ GROUP BY p.party_id;
 CREATE VIEW mostRecentlyWonElection AS
 SELECT p.party_id, m.e_date, e.id AS election_id
 FROM mostRecentlyWonElectionYe m, election e, partyWonElection p
-WHERE m.party_id = p.party_id AND p.country_id = e.country_id AND m.e_date = election.e_date;
+WHERE m.party_id = p.party_id AND p.country_id = e.country_id AND m.e_date = e.e_date;
 
 --answer
 CREATE VIEW answer AS
