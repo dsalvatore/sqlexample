@@ -32,12 +32,30 @@ SELECT party_id, country_id, count(election_id) AS numOfWon
 FROM partyWonElection
 GROUP BY party_id, country_id;
 
+-- --find the average number of winning elections of parties of the same country
+-- CREATE VIEW avgWinningElection AS
+-- SELECT party.country_id AS country_id, 
+-- 	   (sum(numOfTimesWon.numOfWon)/count(party.id)) AS avg
+-- FROM numOfTimesWon JOIN party ON numOfTimesWon.party_id = party.id
+-- GROUP BY party.country_id;
+
+--find the total number won
+CREATE VIEW totalWon AS
+SELECT country_id, sum(numOfWon) AS totalnumberwon
+FROM numOfTimesWon
+GROUP BY country_id;
+
+--find the total party
+CREATE VIEW totalParty4EachCountry AS
+SELECT country_id, count(party.id) AS totalparty
+FROM party
+GROUP BY country_id;
+
 --find the average number of winning elections of parties of the same country
 CREATE VIEW avgWinningElection AS
-SELECT party.country_id AS country_id, 
-	   (sum(numOfTimesWon.numOfWon)/count(party.id)) AS avg
-FROM numOfTimesWon JOIN party ON numOfTimesWon.party_id = party.id
-GROUP BY party.country_id;
+SELECT totalParty4EachCountry.country_id, (totalnumberwon/totalparty) AS avg
+FROM totalWon, totalParty4EachCountry
+WHERE totalWon.country_id = totalParty4EachCountry.country_id;
 
 --find the wanted party
 CREATE VIEW wantedParty AS
