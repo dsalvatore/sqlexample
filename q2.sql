@@ -45,7 +45,7 @@ SELECT p2.name AS partyName,
 	   partyFamily,
 	   stateMarket,
 	   p2.country_id
-FROM partyInfo p1 NATURAL FULL JOIN party p2;
+FROM partyInfo p1 JOIN party p2 on p1.id = p2.id;
 
 --find country name
 CREATE VIEW partyInfo3 AS
