@@ -87,11 +87,14 @@ CREATE VIEW mostRecentlyWonElectionYe AS
 SELECT p.party_id, max(e.e_date) AS e_date
 FROM partyWonElection p JOIN election e ON p.election_id = e.id
 GROUP BY p.party_id;
-
+-- CREATE VIEW mostRecentlyWonElection AS
+-- SELECT p.party_id, m.e_date, e.id AS election_id
+-- FROM mostRecentlyWonElectionYe m, election e, partyWonElection p
+-- WHERE m.party_id = p.party_id AND p.country_id = e.country_id AND m.e_date = e.e_date;
 CREATE VIEW mostRecentlyWonElection AS
 SELECT p.party_id, m.e_date, e.id AS election_id
-FROM mostRecentlyWonElectionYe m, election e, partyWonElection p
-WHERE m.party_id = p.party_id AND p.country_id = e.country_id AND m.e_date = e.e_date;
+FROM (mostRecentlyWonElectionYe m JOIN partyWonElection p ON m.party_id = p.party_id) JOIN election e ON m.e_date = e.e_date;
+
 
 --answer
 CREATE VIEW answer AS
