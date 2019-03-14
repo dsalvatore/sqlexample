@@ -53,8 +53,7 @@ GROUP BY country_id;
 --find the average number of winning elections of parties of the same country
 CREATE VIEW avgWinningElection AS
 SELECT totalParty4EachCountry.country_id, (totalnumberwon/totalparty) AS avg
-FROM totalWon, totalParty4EachCountry
-GROUP BY totalParty4EachCountry.country_id;
+FROM totalWon, totalParty4EachCountry;
 
 
 --find the wanted party
