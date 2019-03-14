@@ -1,58 +1,80 @@
 -- Schema for storing a subset of the Parliaments and Governments database
 SET SEARCH_PATH to parlgov;
+DROP TABLE IF EXISTS q3 CASCADE;
 
-CREATE TABLE q2(
+CREATE TABLE q3(
 	countryName VARCHAR(50),
 	partyName VARCHAR(100),
-	partyFamily VARCHAR(50) ,
-	stateMarket REAL
+	partyFamily VARCHAR(50),
+	wonElections INT,
+	mostRecentlyWonElectionId INT,
+	mostRecentlyWonElectionYear INT
 );
 
---find out how many cabinets created in each country for the past 20 years
-CREATE VIEW numOfCabinet4EachCountry AS
-SELECT country.id, country.name, COUNT(cabinet.id) AS numOfCabinet
-FROM country, cabinet
-WHERE country.id = cabinet.country_id AND
-	  cabinet.start_date >= '1996-01-01' AND
-	  cabinet.start_date < '2017-01-01'
-GROUP BY country.id, country.name;
+--find the highest vote in each election
+CREATE VIEW MaxVote AS
+SELECT election_id, max(votes) AS highestVote
+FROM election_result
+GROUP BY election_id;
 
---find out how many cabinets a party has been joined for the past 20 years
-CREATE VIEW numOfCarbinet4EachParty AS
-SELECT party_id, country_id, COUNT(cabinet.id) AS numOfCabinet
-FROM cabinet_party, cabinet
-WHERE cabinet.start_date >= '1996-01-01' AND
-	  cabinet.start_date < '2017-01-01' AND
-	  cabinet_party.cabinet_id = cabinet.id
+--
+-- find out the winner of each election of each country
+CREATE VIEW partyWonElection AS
+SELECT election_result.party_id, party.country_id,
+	   MaxVote.election_id
+FROM MaxVote, election_result, party
+WHERE MaxVote.election_id = election_result.election_id AND 
+	  election_result.party_id = party.id AND MaxVote.highestVote = election_result.votes;
+
+--find out how many times each party has won an election of each country
+CREATE VIEW numOfTimesWon AS
+SELECT party_id, country_id, count(election_id) AS numOfWon
+FROM partyWonElection
 GROUP BY party_id, country_id;
 
---find the wanted party id
+--find the average number of winning elections of parties of the same country
+CREATE VIEW avgWinningElection AS
+SELECT party.country_id AS country_id, 
+	   (sum(numOfTimesWon.numOfWon)/count(party.id)) AS avg
+FROM numOfTimesWon JOIN party ON numOfTimesWon.party_id = party.id
+GROUP BY party.country_id;
+
+--find the wanted party
 CREATE VIEW wantedParty AS
-SELECT n2.party_id
-FROM numOfCabinet4EachCountry n1, numOfCarbinet4EachParty n2
-WHERE n1.numOfCabinet = n2.numOfCabinet AND
-	  n1.id = n2.country_id;
-
--- find the wanted infomation of all parties
-CREATE VIEW partyInfo AS
-SELECT party_position.party_id, family AS partyFamily, state_market AS stateMarket
-FROM party_family JOIN party_position ON party_family.party_id = party_position.party_id, wantedParty
-WHERE wantedParty.party_id = party_position.party_id;
-
---find party name and country id
-CREATE VIEW partyInfo2 AS
-SELECT p2.name AS partyName,
-	   partyFamily,
-	   stateMarket,
-	   p2.country_id
-FROM partyInfo p1 JOIN party p2 ON p1.party_id = p2.id;
+SELECT numOfTimesWon.party_id AS party_id, numOfTimesWon.country_id AS country_id
+FROM avgWinningElection JOIN numOfTimesWon on avgWinningElection.country_id = numOfTimesWon.country_id
+WHERE numOfTimesWon.numOfWon > avgWinningElection.avg;
 
 --find country name
-CREATE VIEW partyInfo3 AS
-SELECT c.name AS countryName, partyName, partyFamily, stateMarket	  
-FROM partyInfo2 p JOIN country c ON p.country_id = c.id;
+CREATE VIEW wantedPartyInfo1 AS
+SELECT w.party_id AS party_id, c.name AS countryName
+FROM wantedParty w JOIN country c ON w.country_id = c.id;
 
---Answer
-INSERT INTO q2
+CREATE VIEW wantedPartyInfo2 AS
+SELECT w.party_id, countryName, p.name AS partyName
+FROM wantedPartyInfo1 w JOIN party p ON w.party_id = p.id;
+
+--find party family
+CREATE VIEW wantedPartyInfo3 AS
+SELECT w.party_id, countryName, partyName, p.family AS partyFamily
+FROM wantedPartyInfo2 w JOIN party_family p ON w.party_id = p.party_id;
+
+--find number of election won
+CREATE VIEW wantedPartyInfo4 AS
+SELECT w.party_id, countryName, partyName, partyFamily, n.numOfWon AS wonElections
+FROM wantedPartyInfo3 w JOIN numOfTimesWon n ON w.party_id = n.party_id;
+
+--find most recently won election id and year
+CREATE VIEW mostRecentlyWonElection AS
+SELECT p.party_id AS party_id, p.election_id AS election_id, max(e.e_date) AS e_date
+FROM partyWonElection p JOIN election e ON p.election_id = e.id
+GROUP BY p.party_id, p.election_id;
+
+--answer
+CREATE VIEW answer AS
+SELECT countryName, partyName, partyFamily, wonElections, m.election_id AS mostRecentlyWonElectionId, EXTRACT(year FROM m.e_date) AS mostRecentlyWonElectionYear
+FROM wantedPartyInfo4 w JOIN mostRecentlyWonElection m ON w.party_id = m.party_id;
+
+INSERT INTO q3
 SELECT *
-FROM partyInfo3;
+FROM answer;
