@@ -13,7 +13,7 @@ CREATE VIEW numOfCabinet4EachCountry AS
 SELECT country.id, country.name, COUNT(cabinet.id) AS numOfCabinet
 FROM country, cabinet
 WHERE country.id = cabinet.country_id AND
-	  cabinet.start_date >= '1996-01-01' AND
+	  cabinet.start_date >= '2012-01-01' AND
 	  cabinet.start_date < '2017-01-01'
 GROUP BY country.id, country.name;
 
@@ -21,7 +21,7 @@ GROUP BY country.id, country.name;
 CREATE VIEW numOfCarbinet4EachParty AS
 SELECT party_id, country_id, COUNT(cabinet.id) AS numOfCabinet
 FROM cabinet_party, cabinet
-WHERE cabinet.start_date >= '1996-01-01' AND
+WHERE cabinet.start_date >= '2012-01-01' AND
 	  cabinet.start_date < '2017-01-01' AND
 	  cabinet_party.cabinet_id = cabinet.id
 GROUP BY party_id, country_id;
@@ -45,7 +45,7 @@ SELECT p2.name AS partyName,
 	   partyFamily,
 	   stateMarket,
 	   p2.country_id
-FROM partyInfo p1 JOIN party p2 ON p1.party_id = p2.id;
+FROM partyInfo p1 FULL JOIN party p2 ON p1.party_id = p2.id;
 
 --find country name
 CREATE VIEW partyInfo3 AS
