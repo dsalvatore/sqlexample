@@ -83,10 +83,15 @@ SELECT w.party_id, countryName, partyName, partyFamily, n.numOfWon AS wonElectio
 FROM wantedPartyInfo3 w JOIN numOfTimesWon n ON w.party_id = n.party_id;
 
 --find most recently won election id and year
-CREATE VIEW mostRecentlyWonElection AS
-SELECT p.party_id AS party_id, p.election_id AS election_id, max(e.e_date) AS e_date
+CREATE VIEW mostRecentlyWonElectionYe AS
+SELECT p.party_id, max(e.e_date) AS e_date
 FROM partyWonElection p JOIN election e ON p.election_id = e.id
-GROUP BY p.party_id, p.election_id;
+GROUP BY p.party_id;
+
+CREATE VIEW mostRecentlyWonElection AS
+SELECT p.party_id, e_date, e.id AS election_id
+FROM mostRecentlyWonElectionYe m, election e, partyWonElection p
+WHERE m.party_id = p.party_id AND p.country_id = e.country_id AND m.e_date = election_result.e_date;
 
 --answer
 CREATE VIEW answer AS
