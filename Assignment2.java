@@ -40,6 +40,8 @@ public class Assignment2 extends JDBCSubmission {
             return true;
         }
         catch(SQLException e){
+            System.err.println("SQL Exception." +
+                        "<Message>: " + se.getMessage());
             return false;
         }
     }
