@@ -30,8 +30,6 @@ public class Assignment2 extends JDBCSubmission {
         catch(SQLException e){
             return false;
         }
-
-        return false;
     }
 
     @Override
