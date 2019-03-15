@@ -36,7 +36,7 @@ public class Assignment2 extends JDBCSubmission {
     @Override
     public boolean disconnectDB() {
         // Implement this method!
-        if(conn != NULL){
+        if(conn != null){
             conn.close();
             return true;
         }
@@ -56,10 +56,10 @@ public class Assignment2 extends JDBCSubmission {
 
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, countryName);
-            Resultset rs = stmt.executeQuery();
+            ResultSet rs = stmt.executeQuery();
 
-            List<Int> electionId = new ArrayList<Int>();
-            List<Int> cabinetId = new ArrayList<Int>();
+            List<Integer> electionId = new ArrayList<Integer>();
+            List<Integer> cabinetId = new ArrayList<Integer>();
 
             while(rs.next()){
                 electionId.add(rs.getInt("electionId"));
