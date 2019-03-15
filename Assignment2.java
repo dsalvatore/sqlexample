@@ -73,6 +73,8 @@ public class Assignment2 extends JDBCSubmission {
             return new ElectionCabinetResult(electionId, cabinetId);
         }
         catch(SQLException se){
+            System.err.println("SQL Exception." +
+                        "<Message>: " + se.getMessage());
             return null;
         }
     }
