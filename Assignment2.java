@@ -1,5 +1,6 @@
 import java.sql.*;
 import java.util.List;
+import java.util.ArrayList;
 
 // If you are looking for Java data structures, these are highly useful.
 // Remember that an important part of your mark is for doing as much in SQL (not Java) as you can.
@@ -23,7 +24,7 @@ public class Assignment2 extends JDBCSubmission {
             url = "jdbc:postgresql://localhost:5432/cac343h-wangy542";
             username = "wangy542";
             password = "";
-            Connection conn = DriverManager.getConnection(url, username, password);
+            connection = DriverManager.getConnection(url, username, password);
             return true;
         }
         catch(SQLException e){
@@ -36,8 +37,8 @@ public class Assignment2 extends JDBCSubmission {
     @Override
     public boolean disconnectDB() {
         // Implement this method!
-        if(conn != null){
-            conn.close();
+        if(connection != null){
+            connection.close();
             return true;
         }
         else 
@@ -54,7 +55,7 @@ public class Assignment2 extends JDBCSubmission {
                   "e.country_id = country.id AND cabinet.country_id = country.id AND " +
                   "cabinet.election_id = e.id " + "ORDER BY e.e_date DESC;";
 
-            PreparedStatement stmt = conn.prepareStatement(sql);
+            PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setString(1, countryName);
             ResultSet rs = stmt.executeQuery();
 
