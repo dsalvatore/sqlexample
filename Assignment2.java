@@ -84,7 +84,7 @@ public class Assignment2 extends JDBCSubmission {
         System.out.println("Hello");
         try {
             Assignment2 test = new Assignment2();
-            boolean t = test.connectDB("jdbc:postgresql://localhost:5432/csc343h-wangy542?currentSchema=parlgov", "wangy542", "");
+            boolean t = test.connectDB("jdbc:postgresql://localhost:5432/csc343h-wangy542", "wangy542", "");
             test.electionSequence("Germany");
             boolean t1 = test.disconnectDB();
         }
