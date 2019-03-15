@@ -35,12 +35,13 @@ public class Assignment2 extends JDBCSubmission {
     @Override
     public boolean disconnectDB() {
         // Implement this method!
-        if(connection != null){
+        try{
             connection.close();
             return true;
         }
-        else 
+        catch(SQLException e){
             return false;
+        }
     }
 
     @Override
