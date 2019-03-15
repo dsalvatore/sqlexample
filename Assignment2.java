@@ -19,19 +19,55 @@ public class Assignment2 extends JDBCSubmission {
     @Override
     public boolean connectDB(String url, String username, String password) {
         // Implement this method!
+        try{
+            Connection conn = DriverManager.getConnection(url, username, password);
+            return true;
+        }
+        catch(SQLException e){
+            return false;
+        }
+
         return false;
     }
 
     @Override
     public boolean disconnectDB() {
         // Implement this method!
-        return false;
+        if(conn != NULL){
+            conn.close();
+            return true;
+        }
+        else 
+            return false;
     }
 
     @Override
     public ElectionCabinetResult electionSequence(String countryName) {
         // Implement this method!
-        return null;
+        try{
+            String sql;
+            sql = "SELECT e.id AS electionId, cabinet.id AS cabinetId " +
+                  "FROM country, election e, cabinet " + "WHERE country.name = '?' AND " + 
+                  "e.country_id = country.id AND cabinet.country_id = country.id AND " +
+                  "cabinet.election_id = e.id " + "ORDER BY e.e_date DESC;";
+
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, countryName);
+            Resultset rs = stmt.executeQuery();
+
+            List<Int> electionId = new ArrayList<Int>();
+            List<Int> cabinetId = new ArrayList<Int>();
+
+            while(rs.next()){
+                electionId.add(rs.getInt("electionId"));
+                cabinetId.add(rs.getInt("cabinetId"));
+            }
+            rs.close();
+            return new FinalResult(electionId, cabinetId);
+        }
+        catch(SQLException se){
+            return null;
+        }
     }
 
     @Override
@@ -46,4 +82,3 @@ public class Assignment2 extends JDBCSubmission {
     }
 
 }
-
