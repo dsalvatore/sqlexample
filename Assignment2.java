@@ -21,7 +21,7 @@ public class Assignment2 extends JDBCSubmission {
         // Implement this method!
         try{
             url = "jdbc:postgresql://localhost:5432/cac343h-wangy542";
-            username = "wangy542;"
+            username = "wangy542";
             password = "";
             Connection conn = DriverManager.getConnection(url, username, password);
             return true;
