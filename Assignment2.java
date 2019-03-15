@@ -28,6 +28,7 @@ public class Assignment2 extends JDBCSubmission {
             return true;
         }
         catch(SQLException e){
+            System.err.println("SQL Exception." + "<Message>: " + se.getMessage());
             return false;
         }
     }
@@ -40,8 +41,7 @@ public class Assignment2 extends JDBCSubmission {
             return true;
         }
         catch(SQLException e){
-            System.err.println("SQL Exception." +
-                        "<Message>: " + e.getMessage());
+            System.err.println("SQL Exception." + "<Message>: " + se.getMessage());
             return false;
         }
     }
@@ -68,13 +68,12 @@ public class Assignment2 extends JDBCSubmission {
                 cabinetId.add(rs.getInt("cabinetId"));
             }
             rs.close();
-                         System.out.println(electionId.size());
-            System.out.println(cabinetId.size());
+            //System.out.println(electionId.size());
+            //System.out.println(cabinetId.size());
             return new ElectionCabinetResult(electionId, cabinetId);
         }
         catch(SQLException se){
-            System.err.println("SQL Exception." +
-                        "<Message>: " + se.getMessage());
+            System.err.println("SQL Exception." + "<Message>: " + se.getMessage());
             return null;
         }
     }
@@ -88,20 +87,23 @@ public class Assignment2 extends JDBCSubmission {
     public static void main(String[] args) {
         // You can put testing code in here. It will not affect our autotester.
         System.out.println("Hello");
-         try {
-            Assignment2 test = new Assignment2();
-            boolean t = test.connectDB("jdbc:postgresql://localhost:5432/csc343h-wangy542?currentSchema=parlgov", "wangy542", "");
-            ElectionCabinetResult a = test.electionSequence("Japan");
-             System.out.println(a.elections.size());
-             for(int i = 0; i < a.elections.size(); ++i) {
-             System.out.println("Election: " + a.elections.get(i) + " Cabinet: " + a.cabinets.get(i));
-            }
-            boolean t1 = test.disconnectDB();
-        }
+        
+        //test case
+//          try {
+//             Assignment2 testcase = new Assignment2();
+//             testcase.connectDB("jdbc:postgresql://localhost:5432/csc343h-wangy542?currentSchema=parlgov", "wangy542", "");
+//             ElectionCabinetResult a = test.electionSequence("Japan");
+//            System.out.println(a.elections.get("election id | cabinet id");
+//              for(int i = 0; i < a.elections.size(); ++i) {
+//              System.out.println(a.elections.get(i) + " | " + a.cabinets.get(i));
+//             }
+//             testcase.disconnectDB();
+//         }
 
-        catch (ClassNotFoundException e) {
-            System.out.println("Failed to find JDBC driver");
-        }
+//         catch (ClassNotFoundException e) {
+//             System.err.println("SQL Exception." +
+                       // "<Message>: " + e.getMessage());
+//         }
    }
 
 }
