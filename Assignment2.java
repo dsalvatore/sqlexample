@@ -67,7 +67,7 @@ public class Assignment2 extends JDBCSubmission {
                 cabinetId.add(rs.getInt("cabinetId"));
             }
             rs.close();
-            return new FinalResult(electionId, cabinetId);
+            return new ElectionCabinetResult(electionId, cabinetId);
         }
         catch(SQLException se){
             return null;
