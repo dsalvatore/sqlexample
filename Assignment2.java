@@ -21,9 +21,9 @@ public class Assignment2 extends JDBCSubmission {
     public boolean connectDB(String url, String username, String password) {
         // Implement this method!
         try{
-            url = "jdbc:postgresql://localhost:5432/cac343h-wangy542";
-            username = "wangy542";
-            password = "";
+//             url = "jdbc:postgresql://localhost:5432/cac343h-wangy542";
+//             username = "wangy542";
+//             password = "";
             connection = DriverManager.getConnection(url, username, password);
             return true;
         }
@@ -91,7 +91,6 @@ public class Assignment2 extends JDBCSubmission {
 
         catch (ClassNotFoundException e) {
             System.out.println("Failed to find JDBC driver");
-        }
         }
    }
 
