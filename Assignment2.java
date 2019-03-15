@@ -68,6 +68,8 @@ public class Assignment2 extends JDBCSubmission {
                 cabinetId.add(rs.getInt("cabinetId"));
             }
             rs.close();
+                         System.out.println(electionId.size());
+            System.out.println(cabinetId.size());
             return new ElectionCabinetResult(electionId, cabinetId);
         }
         catch(SQLException se){
@@ -88,7 +90,7 @@ public class Assignment2 extends JDBCSubmission {
             Assignment2 test = new Assignment2();
             boolean t = test.connectDB("jdbc:postgresql://localhost:5432/csc343h-wangy542", "wangy542", "");
             ElectionCabinetResult a = test.electionSequence("Canada");
-             System.out.println(a.elections.size());
+//              System.out.println(a.elections.size());
 //              for(int i = 0; i < a.elections.size(); ++i) {
 //              System.out.println("Election: " + a.elections.get(i) + " Cabinet: " + a.cabinets.get(i));
 //             }
