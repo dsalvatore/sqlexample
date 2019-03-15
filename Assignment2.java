@@ -24,7 +24,7 @@ public class Assignment2 extends JDBCSubmission {
 //             url = "jdbc:postgresql://localhost:5432/cac343h-wangy542";
 //             username = "wangy542";
 //             password = "";
-            connection = DriverManager.getConnection(url, username, password);
+            Connection conn = DriverManager.getConnection(url, username, password);
             return true;
         }
         catch(SQLException e){
@@ -36,7 +36,7 @@ public class Assignment2 extends JDBCSubmission {
     public boolean disconnectDB() {
         // Implement this method!
         try{
-            connection.close();
+            conn.close();
             return true;
         }
         catch(SQLException e){
@@ -50,11 +50,11 @@ public class Assignment2 extends JDBCSubmission {
         try{
             String sql;
             sql = "SELECT e.id AS electionId, cabinet.id AS cabinetId " +
-                  "FROM country, election e, cabinet " + "WHERE country.name = '?' AND " + 
+                  "FROM country, election e, cabinet " + "WHERE country.name = ? AND " + 
                   "e.country_id = country.id AND cabinet.country_id = country.id AND " +
                   "cabinet.election_id = e.id " + "ORDER BY e.e_date DESC;";
 
-            PreparedStatement stmt = connection.prepareStatement(sql);
+            PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, countryName);
             ResultSet rs = stmt.executeQuery();
 
@@ -82,16 +82,6 @@ public class Assignment2 extends JDBCSubmission {
     public static void main(String[] args) {
         // You can put testing code in here. It will not affect our autotester.
         System.out.println("Hello");
-        try {
-            Assignment2 test = new Assignment2();
-            boolean t = test.connectDB("jdbc:postgresql://localhost:5432/csc343h-wangy542", "wangy542", "");
-            test.electionSequence("Germany");
-            boolean t1 = test.disconnectDB();
-        }
-
-        catch (ClassNotFoundException e) {
-            System.out.println("Failed to find JDBC driver");
-        }
    }
 
 }
