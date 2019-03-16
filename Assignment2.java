@@ -93,7 +93,7 @@ public class Assignment2 extends JDBCSubmission {
             Assignment2 testcase = new Assignment2();
             testcase.connectDB("jdbc:postgresql://localhost:5432/csc343h-wangy542?currentSchema=parlgov", "wangy542", "");
             ElectionCabinetResult a = test.electionSequence("Japan");
-           System.out.println(a.elections.get("election id | cabinet id");
+           System.out.println("election id | cabinet id");
              for(int i = 0; i < a.elections.size(); ++i) {
              System.out.println(a.elections.get(i) + " | " + a.cabinets.get(i));
             }
